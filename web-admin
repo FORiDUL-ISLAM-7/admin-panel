@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel Finder by Foridul</title>
+  <meta name="description" content="Find hidden admin panels using smart Google dorks, cache, and archive tools. Created by Foridul.">
+  <meta name="author" content="Foridul">
+  <meta property="og:title" content="Admin Panel Finder by Foridul">
+  <meta property="og:description" content="Generate admin panel search links instantly with this tool.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://example.com/preview.jpg"> <!-- Update if hosted -->
+  <meta property="og:url" content="https://yourwebsite.com"> <!-- Update if hosted -->
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      animation: fadeIn 0.5s ease-in;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result a {
+      display: block;
+      color: #2e8b57;
+      margin-bottom: 8px;
+      word-break: break-word;
+      text-decoration: none;
+    }
+    .result a:hover {
+      text-decoration: underline;
+    }
+    #loader {
+      text-align: center;
+      margin: 15px 0;
+      display: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0 }
+      to { opacity: 1 }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin Panel Finder by Foridul</h2>
+    <p>Enter a domain to generate Google Dorks, Cache & Wayback links.</p>
+    <input type="text" id="domain" placeholder="example.com" />
+    <button onclick="generateDorks()">Generate Links</button>
+    <div id="loader">Generating links...</div>
+    <div id="results" class="result"></div>
+  </div>
+
+  <script>
+    function isValidDomain(domain) {
+      const pattern = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,11}?$/;
+      return pattern.test(domain);
+    }
+
+    function generateDorks() {
+      const domain = document.getElementById("domain").value.trim();
+      const results = document.getElementById("results");
+      const loader = document.getElementById("loader");
+      results.innerHTML = "";
+      
+      if (!domain || !isValidDomain(domain)) {
+        results.innerHTML = "<p>Please enter a valid domain (e.g., example.com).</p>";
+        return;
+      }
+
+      loader.style.display = "block";
+
+      setTimeout(() => {
+        const dorks = [
+          `site:${domain} inurl:admin`,
+          `site:${domain} inurl:admin/login`,
+          `site:${domain} intitle:"admin login"`,
+          `site:${domain} inurl:wp-admin`,
+          `site:${domain} inurl:login`,
+          `site:${domain} inurl:cpanel`,
+          `site:${domain} "index of /admin"`,
+          `site:${domain} intitle:"control panel"`,
+        ];
+
+        results.innerHTML += `<h3>Google Dorks:</h3>`;
+        dorks.forEach(dork => {
+          const url = `https://www.google.com/search?q=${encodeURIComponent(dork)}`;
+          results.innerHTML += `<a href="${url}" target="_blank">${dork}</a>`;
+        });
+
+        // Cache link
+        const cacheLink = `https://www.google.com/search?q=cache:${domain}`;
+        results.innerHTML += `<h3>Google Cache:</h3>`;
+        results.innerHTML += `<a href="${cacheLink}" target="_blank">Google Cached Version</a>`;
+
+        // Wayback Machine
+        const wayback = `https://web.archive.org/web/*/${domain}*`;
+        results.innerHTML += `<h3>Wayback Machine:</h3>`;
+        results.innerHTML += `<a href="${wayback}" target="_blank">View Archived Pages</a>`;
+
+        loader.style.display = "none";
+      }, 500); // Simulate processing time
+    }
+  </script>
+</body>
+</html>
